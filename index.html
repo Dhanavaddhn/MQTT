@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit" rel="stylesheet">
+  <title>LED Control</title>
+  <style>
+    html, body {
+      height: 100%; /* Full height of the viewport */
+    }
+    .full-height {
+      height: 100%; /* Full height for the container */
+    }
+    .custom-card {
+      box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2); /* Custom shadow */
+      background-color: #f2f2f2; /* Light grey background */
+      border-color: #555555; /* Blue border */
+      display: flex; /* Flex container */
+      flex-direction: column; /* Stack children vertically */
+      justify-content: center; /* Center vertically */
+      align-items: center; /* Center horizontally */
+
+    
+    }
+    #onButton:hover, #offButton:hover {
+      color: white; /* Change text color */
+      transform: scale(1.1); /* Make the button slightly larger */
+      transition: all 0.3s ease; /* Smooth transition */
+    }
+  </style>
+</head>
+
+<body class="d-flex align-items-center justify-content-center full-height " style="font-family: 'Kanit', sans-serif; ">
+
+  <div class="container">
+    <div class="card text-center custom-card">
+      <div class="card-body">
+        <h1 class="card-title">LED Control</h1>
+        <button id="onButton" class="btn btn-primary m-2" onclick="turnOn()">
+          <i class="fas fa-power-off"></i> Turn On
+        </button>
+        <button id="offButton" class="btn btn-danger m-2" onclick="turnOff()">
+          <i class="fas fa-ban"></i> Turn Off
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+      function turnOn() {
+        const onButton = document.getElementById('onButton');
+        const offButton = document.getElementById('offButton');
+
+        // Set the "On" button state
+        onButton.classList.add('active');
+        offButton.classList.remove('active');
+
+        // Send the "On" state to the server
+        fetch('/toggle?state=1')
+          .then(response => response.text())
+          .then(data => console.log(data))
+          .catch(error => console.error('Error turning LED On:', error));
+
+          Swal.fire({
+            title: 'LED On',
+            text: 'The LED is now turned on.',
+            icon: 'success',
+            confirmButtonText: 'OK'
+          });
+      }
+
+      function turnOff() {
+        const onButton = document.getElementById('onButton');
+        const offButton = document.getElementById('offButton');
+
+        // Set the "Off" button state
+        onButton.classList.remove('active');
+        offButton.classList.add('active');
+
+        // Send the "Off" state to the server
+        fetch('/toggle?state=0')
+          .then(response => response.text())
+          .then(data => console.log(data))
+          .catch(error => console.error('Error turning LED Off:', error));
+
+
+          Swal.fire({
+            title: 'LED Off',
+            text: 'The LED is now turned off.',
+            icon: 'info',
+            confirmButtonText: 'OK'
+          });
+      }
+    </script>
+
+    
+
+</body>
+
+</html>
